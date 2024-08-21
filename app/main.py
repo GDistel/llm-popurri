@@ -26,16 +26,10 @@ def query_wikipedia(query_website_request: QueryWebsiteRequest) -> QueryWebsiteR
 
     question = query_website_request.question
 
-    bs_kwargs=dict(
-        parse_only=bs4.SoupStrainer(
-            class_=("vector-body",)
-        )
-    ),
-
     return {
         "url": url,
         "question": question,
-        "answer": answer_question(url, question, bs_kwargs)
+        "answer": answer_question(url, question)
     }
 
 if __name__ == "__main__":
