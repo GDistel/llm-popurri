@@ -12,5 +12,5 @@ model = ChatOpenAI()
 parser = StrOutputParser()
 chain = prompt_template | model | parser
 
-def translate(text: str, language: str) -> str:
-    return chain.invoke({"language": language, "text": text})
+async def translate(text: str, language: str) -> str:
+    return await chain.ainvoke({"language": language, "text": text})

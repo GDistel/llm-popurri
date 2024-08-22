@@ -16,7 +16,7 @@ def format_docs(docs):
     return "\n\n".join(doc.page_content for doc in docs)
 
 
-def answer_question(website_URL: str, question: str, bs_kwargs: Dict[str, Any] | None = None) -> str:
+async def answer_question(website_URL: str, question: str, bs_kwargs: Dict[str, Any] | None = None) -> str:
     loader = WebBaseLoader(
         web_paths=(website_URL,),
         bs_kwargs=bs_kwargs,
@@ -38,4 +38,4 @@ def answer_question(website_URL: str, question: str, bs_kwargs: Dict[str, Any] |
         | StrOutputParser()
     )
 
-    return rag_chain.invoke(question)
+    return await rag_chain.ainvoke(question)
