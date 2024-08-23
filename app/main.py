@@ -1,4 +1,5 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Form, HTTPException, File, UploadFile
+from app.pdf_questions.llm import answer_question_with_pdf, create_path_for_file
 from app.translations.models import TranslationRequest, TranslationResponse
 from app.translations.llm import translate as llm_translate
 from app.web_chat.llm import answer_question
@@ -30,6 +31,23 @@ async def query_wikipedia(query_website_request: QueryWebsiteRequest) -> QueryWe
     return {
         "url": url,
         "question": question,
+        "answer": answer
+    }
+
+@app.post("/ask_pdf")
+async def upload_pdf(file: UploadFile = File(...), question: str = Form(...)):
+    if file.content_type != "application/pdf":
+        raise HTTPException(status_code=400, detail="Only pdf files allowed")
+
+    content = await file.read()
+    file_path = create_path_for_file(file.filename)
+
+    with open(file_path, "wb") as f:
+        f.write(content)
+
+    answer = await answer_question_with_pdf(question, file_path)
+
+    return {
         "answer": answer
     }
 
