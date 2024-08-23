@@ -50,7 +50,3 @@ async def upload_pdf(file: UploadFile = File(...), question: str = Form(...)) ->
         "question": question,
         "answer": answer
     }
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="localhost", port=8000)
