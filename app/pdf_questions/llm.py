@@ -1,4 +1,6 @@
 import os
+from typing import List
+from langchain.schema import Document
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_openai import ChatOpenAI
 from langchain_chroma import Chroma
@@ -13,25 +15,25 @@ def create_path_for_file(file_name: str) -> str:
     file_path = os.path.join(current_dir, "data", file_name)
     return file_path
 
-def load_pdf(file_path):
+def load_pdf(file_path: str) -> List[Document]:
     loader = PyPDFLoader(file_path)
     docs = loader.load()
     return docs
 
-def split_text(docs):
+def split_text(docs) -> List[Document]:
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     splits = text_splitter.split_documents(docs)
     return splits
 
-def create_vectorstore(splits):
+def create_vectorstore(splits) -> Chroma:
     vectorstore = Chroma.from_documents(documents=splits, embedding=OpenAIEmbeddings())
     return vectorstore
 
-def create_llm():
+def create_llm() -> ChatOpenAI:
     llm = ChatOpenAI(model="gpt-4o")
     return llm
 
-def create_prompt():
+def create_prompt() -> ChatPromptTemplate:
     system_prompt = (
         "You are an assistant for question-answering tasks. "
         "Use the following pieces of retrieved context to answer "
@@ -49,7 +51,7 @@ def create_prompt():
     )
     return prompt
 
-async def answer_question_with_pdf(question, pdfFilePath):
+async def answer_question_with_pdf(question, pdfFilePath) -> str:
     docs = load_pdf(pdfFilePath)
     splits = split_text(docs)
     vector_store = create_vectorstore(splits)

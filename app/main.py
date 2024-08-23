@@ -48,6 +48,7 @@ async def upload_pdf(file: UploadFile = File(...), question: str = Form(...)):
     answer = await answer_question_with_pdf(question, file_path)
 
     return {
+        "question": question,
         "answer": answer
     }
 
