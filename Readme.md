@@ -18,3 +18,13 @@ As easy as `docker compose up` (mind to have a compliant `.env` file)
 ## Usage
 
 See docs at `${baseURL}/docs`
+
+## Postgres connection URI
+
+From within docker you can reference your host computer `localhost` as `host.docker.internal`
+
+For example:
+- If you use docker: `postgresql://postgres:postgres@host.docker.internal.docker.internal:5432/test_db`
+- Otherwise: `postgresql://postgres:postgres@host.docker.internal:5432/test_db`
+
+Alternatively, if the postgres is running on docker, you can add both to the same network.

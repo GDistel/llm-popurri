@@ -1,4 +1,3 @@
-from http.client import HTTPException
 import os
 from langchain_community.utilities import SQLDatabase
 from operator import itemgetter
