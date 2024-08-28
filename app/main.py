@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Form, HTTPException, File, UploadFile
-from app.models import TranslationRequest, TranslationResponse, QueryWebsiteRequest, QueryWebsiteResponse, QuestionAnswerResponse
+from app.db_ask import ask_question_to_db
+from app.models import QueryDBRequest, TranslationRequest, TranslationResponse, QueryWebsiteRequest, QueryWebsiteResponse, QuestionAnswerResponse
 from app.pdf_questions import answer_question_with_pdf, create_path_for_file
 from app.translations import translate as llm_translate
 from app.web_chat import answer_question
@@ -49,4 +50,12 @@ async def upload_pdf(file: UploadFile = File(...), question: str = Form(...)) ->
     return {
         "question": question,
         "answer": answer
+    }
+
+@app.post("/ask_db")
+async def ask_db(db_query_request: QueryDBRequest):
+    question = db_query_request.question
+    response = ask_question_to_db(question)
+    return {
+        "response": response,
     }

@@ -19,3 +19,6 @@ class QuestionAnswerResponse(BaseModel):
 
 class QueryWebsiteResponse(QuestionAnswerResponse):
     url: str
+
+class QueryDBRequest(BaseModel):
+    question: str
